@@ -1,6 +1,12 @@
 {
-  "latest": "2.6",
+  "latest": "2.7",
   "releases": {
+    "2.7": {
+      "title": "Painel de sistema, backup e restauracao",
+      "description": "Organiza Wi-Fi e senha na mesma area, move a opcao de falar hora certa para o bloco Sistema, adiciona botao de verificar atualizacoes e restaura as telas de backup e restauracao.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v2.7.tar.gz",
+      "sha256": "feced203c831f4fab0c4379de76e3b951142237ba737060332e83428367f7127"
+    },
     "2.6": {
       "title": "Falar hora certa e atualizador",
       "description": "Adiciona opcao para anunciar a hora cheia quando a repetidora esta em repouso. Tambem instala a tela e os comandos de atualizacao remota.",
