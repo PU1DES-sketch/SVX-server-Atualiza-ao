@@ -1,6 +1,12 @@
 {
-  "latest": "2.7",
+  "latest": "2.8",
   "releases": {
+    "2.8": {
+      "title": "Backup em arquivo unico",
+      "description": "Altera a tela de backup para gerar e baixar automaticamente um unico arquivo .tar.gz no computador. Mantem restauracao por upload desse mesmo arquivo.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v2.8.tar.gz",
+      "sha256": "46f5759bfad6f9016cdaa0dc62e45f47334623cdfd13be73a303c5e3ea5723be"
+    },
     "2.7": {
       "title": "Painel de sistema, backup e restauracao",
       "description": "Organiza Wi-Fi e senha na mesma area, move a opcao de falar hora certa para o bloco Sistema, adiciona botao de verificar atualizacoes e restaura as telas de backup e restauracao.",
