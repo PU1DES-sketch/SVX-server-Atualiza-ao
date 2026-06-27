@@ -1,6 +1,12 @@
 {
-  "latest": "2.8",
+  "latest": "2.9",
   "releases": {
+    "2.9": {
+      "title": "Progresso visual na atualizacao",
+      "description": "Adiciona barra de progresso, mensagens de etapa e resultado final na tela de atualizacao para o usuario acompanhar o processo.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v2.9.tar.gz",
+      "sha256": "8f4f3e1d26396e97704996797ab42f07b93b6ce8d8a63070f3d0c10542e22dbc"
+    },
     "2.8": {
       "title": "Backup em arquivo unico",
       "description": "Altera a tela de backup para gerar e baixar automaticamente um unico arquivo .tar.gz no computador. Mantem restauracao por upload desse mesmo arquivo.",
