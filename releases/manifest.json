@@ -1,6 +1,12 @@
 {
-  "latest": "3.1",
+  "latest": "3.2",
   "releases": {
+    "3.2": {
+      "title": "Correcao do audio USB",
+      "description": "Corrige a regulagem de ganho do microfone USB e volume do alto-falante USB movendo o ajuste ALSA para o aplicador com permissao de root.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v3.2.tar.gz",
+      "sha256": "db2438529bd4dec0f52809c010dc329ce32d8d6a668528846c784e8565774b27"
+    },
     "3.1": {
       "title": "Comandos DTMF",
       "description": "Adiciona tela DTMF nas configuracoes, senha configuravel e comandos para ativar/desativar o link com servidor e ativar/desativar a repetidora pelo radio.",
