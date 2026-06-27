@@ -1,6 +1,12 @@
 {
-  "latest": "3.2",
+  "latest": "3.3",
   "releases": {
+    "3.3": {
+      "title": "Desligamento e feedback ao salvar",
+      "description": "Adiciona botao para desligar o Raspberry com seguranca e melhora o modal de salvar/reiniciar exibindo mensagem de aplicacao em andamento.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v3.3.tar.gz",
+      "sha256": "5e347f9b932fea8597a5a82f218fbaf7a841aaedde6f37b1f882f31e63eab306"
+    },
     "3.2": {
       "title": "Correcao do audio USB",
       "description": "Corrige a regulagem de ganho do microfone USB e volume do alto-falante USB movendo o ajuste ALSA para o aplicador com permissao de root.",
