@@ -1,6 +1,12 @@
 {
-  "latest": "2.9",
+  "latest": "3.0",
   "releases": {
+    "3.0": {
+      "title": "Tela de configuracoes mais compacta",
+      "description": "Reduz a largura dos campos, o espacamento entre colunas e a altura entre linhas da tela de configuracoes para deixar o painel mais comprimido e facil de visualizar.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v3.0.tar.gz",
+      "sha256": "361cc66f4e20777b48b908e305a401cea37e169bbe14f6191eab357ddcbc96f5"
+    },
     "2.9": {
       "title": "Progresso visual na atualizacao",
       "description": "Adiciona barra de progresso, mensagens de etapa e resultado final na tela de atualizacao para o usuario acompanhar o processo.",
