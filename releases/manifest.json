@@ -1,6 +1,12 @@
 {
-  "latest": "3.0",
+  "latest": "3.1",
   "releases": {
+    "3.1": {
+      "title": "Comandos DTMF",
+      "description": "Adiciona tela DTMF nas configuracoes, senha configuravel e comandos para ativar/desativar o link com servidor e ativar/desativar a repetidora pelo radio.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v3.1.tar.gz",
+      "sha256": "795c1c41c21003ab7db7a1bb8ecd5de94a355b25c57a59a86e288cd861cac502"
+    },
     "3.0": {
       "title": "Tela de configuracoes mais compacta",
       "description": "Reduz a largura dos campos, o espacamento entre colunas e a altura entre linhas da tela de configuracoes para deixar o painel mais comprimido e facil de visualizar.",
