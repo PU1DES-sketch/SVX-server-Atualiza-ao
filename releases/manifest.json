@@ -1,6 +1,12 @@
 {
-  "latest": "3.5",
+  "latest": "3.6",
   "releases": {
+    "3.6": {
+      "title": "Reset de fabrica do repetidor",
+      "description": "Adiciona botao RESETAR REPETIDOR com alerta e confirmacao digitando RESETAR. O reset limpa configuracoes, Wi-Fi salvo, servidor, audio de ID, logs e temporarios, mantendo o sistema, painel, atualizador, DTMF padrao e pacote de voz instalados.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v3.6.tar.gz",
+      "sha256": "0bd1eec0a952fa5792179a670d59d22094185a25a5c44470b35d31c366657a5e"
+    },
     "3.5": {
       "title": "Hora certa com voz humana e PTT seguro",
       "description": "Adiciona pacote local de voz feminina em portugues para falar a hora por partes, corrige o timer para rodar apenas na hora cheia, inclui minutos quando necessario, segura o PTT ate terminar o audio e mantem o COS ativo alto do novo hardware.",
