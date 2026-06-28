@@ -1,6 +1,12 @@
 {
-  "latest": "3.3",
+  "latest": "3.4",
   "releases": {
+    "3.4": {
+      "title": "COS ativo alto no Raspberry",
+      "description": "Inverte o COS para o novo hardware: o SvxLink passa a usar GPIO_SQL_PIN=gpio535 e os scripts consideram o COS ativo quando o pino do Raspberry estiver em nivel alto.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v3.4.tar.gz",
+      "sha256": "39b00e40f5b4615ae3785efa4d3a63a42a7cf4f2bd6009886e6b3b830607944c"
+    },
     "3.3": {
       "title": "Desligamento e feedback ao salvar",
       "description": "Adiciona botao para desligar o Raspberry com seguranca e melhora o modal de salvar/reiniciar exibindo mensagem de aplicacao em andamento.",
