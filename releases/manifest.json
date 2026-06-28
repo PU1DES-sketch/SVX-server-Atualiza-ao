@@ -1,6 +1,12 @@
 {
-  "latest": "3.4",
+  "latest": "3.5",
   "releases": {
+    "3.5": {
+      "title": "Hora certa com voz humana e PTT seguro",
+      "description": "Adiciona pacote local de voz feminina em portugues para falar a hora por partes, corrige o timer para rodar apenas na hora cheia, inclui minutos quando necessario, segura o PTT ate terminar o audio e mantem o COS ativo alto do novo hardware.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v3.5.tar.gz",
+      "sha256": "3bd84c25be7700d40810717fae233a36619576e5c0acc23b0e5c97e3f3810044"
+    },
     "3.4": {
       "title": "COS ativo alto no Raspberry",
       "description": "Inverte o COS para o novo hardware: o SvxLink passa a usar GPIO_SQL_PIN=gpio535 e os scripts consideram o COS ativo quando o pino do Raspberry estiver em nivel alto.",
