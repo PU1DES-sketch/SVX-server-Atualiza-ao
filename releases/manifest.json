@@ -1,6 +1,12 @@
 {
-  "latest": "3.6",
+  "latest": "3.7",
   "releases": {
+    "3.7": {
+      "title": "Audio, ultimas chamadas e hora certa",
+      "description": "Corrige volume USB zerado herdado da imagem, faz as ultimas chamadas lerem o log correto do SvxLink, evita arquivo de log vazio, e muda o botao da hora certa para o proprio SvxLink tocar o audio com PTT seguro, sem disputar a placa USB.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v3.7.tar.gz",
+      "sha256": "0cd93d58cfc3f832ed5b70eef0b7d3a09416288ad853af080d38e89ea3a42326"
+    },
     "3.6": {
       "title": "Reset de fabrica do repetidor",
       "description": "Adiciona botao RESETAR REPETIDOR com alerta e confirmacao digitando RESETAR. O reset limpa configuracoes, Wi-Fi salvo, servidor, audio de ID, logs e temporarios, mantendo o sistema, painel, atualizador, DTMF padrao e pacote de voz instalados.",
