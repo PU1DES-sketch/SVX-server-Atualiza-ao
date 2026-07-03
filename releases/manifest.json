@@ -1,6 +1,12 @@
 {
-  "latest": "3.8",
+  "latest": "3.9",
   "releases": {
+    "3.9": {
+      "title": "Base estavel com audio principal funcionando",
+      "description": "Salva a versao atual estavel do repetidor com audio principal, bip, identificacao, painel e configuracoes preservadas. A hora certa permanece como funcao em teste e nao deve ser considerada final nesta versao.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v3.9.tar.gz",
+      "sha256": "5171509431bbd9e73b432f7020e25c0580d60767c4b3c3132de966986dc69542"
+    },
     "3.8": {
       "title": "Rollback do audio do repetidor",
       "description": "Restaura a parte de audio, eventos do SvxLink, hora certa e aplicador de configuracao para a base funcional da versao 3.5, anterior aos testes que afetaram bip, identificacao e audio da hora.",
