@@ -1,6 +1,12 @@
 {
-  "latest": "3.7",
+  "latest": "3.8",
   "releases": {
+    "3.8": {
+      "title": "Rollback do audio do repetidor",
+      "description": "Restaura a parte de audio, eventos do SvxLink, hora certa e aplicador de configuracao para a base funcional da versao 3.5, anterior aos testes que afetaram bip, identificacao e audio da hora.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v3.8.tar.gz",
+      "sha256": "b58ee816abf92d5013ac28561304393d1a8b978c4e7c5e1ae54a9a604d0ff05c"
+    },
     "3.7": {
       "title": "Audio, ultimas chamadas e hora certa",
       "description": "Corrige volume USB zerado herdado da imagem, faz as ultimas chamadas lerem o log correto do SvxLink, evita arquivo de log vazio, e muda o botao da hora certa para o proprio SvxLink tocar o audio com PTT seguro, sem disputar a placa USB.",
