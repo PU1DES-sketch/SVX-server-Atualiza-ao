@@ -1,6 +1,12 @@
 {
-  "latest": "3.9",
+  "latest": "4.0",
   "releases": {
+    "4.0": {
+      "title": "Downgrade e lista de versoes anteriores",
+      "description": "Adiciona a tela Downgrade / versao anterior dentro de Backup, mostrando os 10 ultimos backups automaticos de atualizacao com versao, data, quantidade de arquivos e tamanho. Permite restaurar uma versao anterior que estava funcionando, criando antes um backup de seguranca do estado atual.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v4.0.tar.gz",
+      "sha256": "a61997bab12c40af8b750d118a991711504cb5f23a534503a2c49993f27ae054"
+    },
     "3.9": {
       "title": "Base estavel com audio principal funcionando",
       "description": "Salva a versao atual estavel do repetidor com audio principal, bip, identificacao, painel e configuracoes preservadas. A hora certa permanece como funcao em teste e nao deve ser considerada final nesta versao.",
