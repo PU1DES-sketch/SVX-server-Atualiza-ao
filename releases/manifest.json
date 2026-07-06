@@ -1,35 +1,11 @@
 {
-  "latest": "4.1",
+  "latest": "4.2",
   "releases": {
-    "4.1": {
-      "title": "Base estavel com bip reforcado e versao real no servidor",
-      "description": "Consolida a base atual do repetidor como estavel. Corrige o historico das ultimas chamadas, melhora a logica da hora certa quando a repetidora esta ocupada, reforca o volume do bip de cortesia apos o TX e passa a reportar a versao real instalada para o servidor exibir 4.0, 4.1, 3.8 e outras versoes corretamente.",
-      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v4.1.tar.gz",
-      "sha256": "1dd9a6751c51bb532c3dac7f2d86a8d5c0a23531a85ca74aaf3f2f65610c4e83"
-    },
-    "4.0": {
-      "title": "Downgrade e lista de versoes anteriores",
-      "description": "Adiciona a tela Downgrade / versao anterior dentro de Backup, mostrando os 10 ultimos backups automaticos de atualizacao com versao, data, quantidade de arquivos e tamanho. Permite restaurar uma versao anterior que estava funcionando, criando antes um backup de seguranca do estado atual.",
-      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v4.0.tar.gz",
-      "sha256": "a61997bab12c40af8b750d118a991711504cb5f23a534503a2c49993f27ae054"
-    },
-    "3.9": {
-      "title": "Base estavel com audio principal funcionando",
-      "description": "Salva a versao atual estavel do repetidor com audio principal, bip, identificacao, painel e configuracoes preservadas. A hora certa permanece como funcao em teste e nao deve ser considerada final nesta versao.",
-      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v3.9.tar.gz",
-      "sha256": "5171509431bbd9e73b432f7020e25c0580d60767c4b3c3132de966986dc69542"
-    },
-    "3.8": {
-      "title": "Rollback do audio do repetidor",
-      "description": "Restaura a parte de audio, eventos do SvxLink, hora certa e aplicador de configuracao para a base funcional da versao 3.5, anterior aos testes que afetaram bip, identificacao e audio da hora.",
-      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v3.8.tar.gz",
-      "sha256": "b58ee816abf92d5013ac28561304393d1a8b978c4e7c5e1ae54a9a604d0ff05c"
-    },
-    "3.7": {
-      "title": "Audio, ultimas chamadas e hora certa",
-      "description": "Corrige volume USB zerado herdado da imagem, faz as ultimas chamadas lerem o log correto do SvxLink, evita arquivo de log vazio, e muda o botao da hora certa para o proprio SvxLink tocar o audio com PTT seguro, sem disputar a placa USB.",
-      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v3.7.tar.gz",
-      "sha256": "0cd93d58cfc3f832ed5b70eef0b7d3a09416288ad853af080d38e89ea3a42326"
+    "4.2": {
+      "title": "Dashboard publico e aplicacao protegida",
+      "description": "Libera dashboard e configuracoes em modo leitura para consulta sem senha. Cria a area Aplicar Configuracoes protegida por login e pede a senha novamente na hora de salvar e reiniciar a repetidora.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v4.2.tar.gz",
+      "sha256": "124ee4308a08c1e8c8f2ffe869337a6fce30542b0daab97b8e8e8c108bad7010"
     },
     "3.6": {
       "title": "Reset de fabrica do repetidor",
