@@ -1,6 +1,12 @@
 {
-  "latest": "4.3",
+  "latest": "4.4",
   "releases": {
+    "4.4": {
+      "title": "Menu simplificado do painel",
+      "description": "Organiza o menu lateral para ficar mais claro no uso diario: Dashboard aberto, Visualizar Configuracoes em modo leitura, Configuracoes protegidas por login, Atualizar Painel e Sair do Painel apenas quando houver sessao ativa.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v4.4.tar.gz",
+      "sha256": "02b1fc0959bf6b3acf7b82377ddd0bbb02d44e51291fb26a3b4c0a1a9b61d99b"
+    },
     "4.3": {
       "title": "Menu simplificado do painel",
       "description": "Organiza o menu lateral para ficar mais claro no uso diario: Dashboard aberto, Visualizar Configuracoes em modo leitura, Configuracoes protegidas por login, Atualizar Painel e Sair do Painel apenas quando houver sessao ativa.",
