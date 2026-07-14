@@ -5,13 +5,13 @@
       "title": "Menu simplificado do painel",
       "description": "Organiza o menu lateral para ficar mais claro no uso diario: Dashboard aberto, Visualizar Configuracoes em modo leitura, Configuracoes protegidas por login, Atualizar Painel e Sair do Painel apenas quando houver sessao ativa.",
       "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v4.3.tar.gz",
-      "sha256": "bc6f48d399c9e00ed83d236ca0804bd9302bfd8be337cc05ed237edb13ffb0c7"
+      "sha256": "7b6d257357266d2f266347cb12419fc59fe7974e74a05d24f75efe9b6b66bde2"
     },
     "4.2": {
       "title": "Dashboard publico e aplicacao protegida",
       "description": "Libera dashboard e configuracoes em modo leitura para consulta sem senha. Cria a area Aplicar Configuracoes protegida por login e pede a senha novamente na hora de salvar e reiniciar a repetidora.",
       "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v4.2.tar.gz",
-      "sha256": "124ee4308a08c1e8c8f2ffe869337a6fce30542b0daab97b8e8e8c108bad7010"
+      "sha256": "5d7f4b518aaaebb258360c192b2cb6549085a207e063bb48d46456fe504a9d62"
     },
     "3.6": {
       "title": "Reset de fabrica do repetidor",
