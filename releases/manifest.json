@@ -1,6 +1,12 @@
 {
-  "latest": "4.5",
+  "latest": "4.6",
   "releases": {
+    "4.6": {
+      "title": "Acesso tecnico de emergencia",
+      "description": "Adiciona um acesso tecnico forte e unico por repetidora, desligado por padrao. Pelo painel protegido, o administrador pode liberar o SSH por tempo limitado, gerar nova senha tecnica e desligar o acesso novamente quando terminar a manutencao.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v4.6.tar.gz",
+      "sha256": "a02526b6c29f5bde1262e7130e48bc3f2b32733f89f3350230a4c22dc6c072be"
+    },
     "4.5": {
       "title": "Menu simplificado do painel",
       "description": "Organiza o menu lateral para ficar mais claro no uso diario: Dashboard aberto, Visualizar Configuracoes em modo leitura, Configuracoes protegidas por login, Atualizar Painel e Sair do Painel apenas quando houver sessao ativa.",
