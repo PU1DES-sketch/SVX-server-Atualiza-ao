@@ -1,0 +1,11 @@
+[Unit]
+Description=Executa autocura do ProtoRadio periodicamente
+
+[Timer]
+OnBootSec=3min
+OnUnitActiveSec=2min
+AccuracySec=20s
+Unit=repeater-selfheal.service
+
+[Install]
+WantedBy=timers.target

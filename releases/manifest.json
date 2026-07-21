@@ -1,5 +1,5 @@
 {
-  "latest": "4.6",
+  "latest": "4.7",
   "releases": {
     "4.6": {
       "title": "Acesso tecnico de emergencia",
@@ -96,6 +96,12 @@
       "description": "Adiciona opcao para anunciar a hora cheia quando a repetidora esta em repouso. Tambem instala a tela e os comandos de atualizacao remota.",
       "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v2.6.tar.gz",
       "sha256": "c9a95dd1751926fc9fad22539b985893a6e287318f1730782124bc7a947bae14"
+    },
+    "4.7": {
+      "title": "Autocura de rede e servicos",
+      "description": "Adiciona autocura do ProtoRadio: verifica periodicamente status do painel, SvxLink e conectividade. Se detectar travamento, tenta reiniciar os servicos e recuperar o Wi-Fi automaticamente. Se a falha persistir por varios ciclos, reinicia o Raspberry sozinho para voltar a operacao.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v4.7.tar.gz",
+      "sha256": "56bf86baba3a943488bc018fc4c7fb617d5dbfe198752c478b7a843c3ce1321b"
     }
   }
 }

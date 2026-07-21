@@ -1,0 +1,197 @@
+#!/usr/bin/env python3
+import json
+import os
+import subprocess
+import time
+from datetime import datetime
+from pathlib import Path
+
+CONFIG = Path("/etc/repeater/config.json")
+STATUS_FILE = Path("/var/www/html/repeater/status.json")
+STATE_DIR = Path("/var/lib/repeater/selfheal")
+STATE_FILE = STATE_DIR / "state.json"
+LOG_FILE = Path("/var/log/repeater-selfheal.log")
+STATUS_STALE_SEC = 150
+FAIL_WINDOW_SEC = 900
+REBOOT_AFTER_FAILS = 3
+
+
+def log(message: str) -> None:
+    LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with LOG_FILE.open("a", encoding="utf-8") as fh:
+        fh.write(f"{datetime.now():%F %T} {message}\n")
+
+
+def run(cmd, check=False, timeout=25):
+    return subprocess.run(
+        cmd,
+        check=check,
+        timeout=timeout,
+        text=True,
+        capture_output=True,
+    )
+
+
+def command_exists(name: str) -> bool:
+    return subprocess.run(["sh", "-c", f"command -v {name} >/dev/null 2>&1"]).returncode == 0
+
+
+def load_json(path: Path, default):
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return default
+
+
+def save_json(path: Path, payload) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+def load_config():
+    return load_json(CONFIG, {})
+
+
+def service_active(name: str) -> bool:
+    return subprocess.run(["systemctl", "is-active", "--quiet", name]).returncode == 0
+
+
+def restart_service(name: str) -> bool:
+    res = run(["systemctl", "restart", name], timeout=40)
+    if res.returncode == 0:
+        log(f"servico reiniciado: {name}")
+        return True
+    log(f"falha ao reiniciar {name}: {(res.stderr or res.stdout).strip()}")
+    return False
+
+
+def file_fresh(path: Path, max_age_sec: int) -> bool:
+    try:
+        return (time.time() - path.stat().st_mtime) <= max_age_sec
+    except FileNotFoundError:
+        return False
+
+
+def ip_addrs():
+    try:
+        out = run(["hostname", "-I"], timeout=5)
+        if out.returncode != 0:
+            return []
+        return [part for part in out.stdout.strip().split() if "." in part or ":" in part]
+    except Exception:
+        return []
+
+
+def interface_has_ip(iface: str) -> bool:
+    res = run(["ip", "-4", "-o", "addr", "show", "dev", iface, "scope", "global"], timeout=8)
+    return res.returncode == 0 and bool(res.stdout.strip())
+
+
+def has_default_route() -> bool:
+    res = run(["ip", "route", "show", "default"], timeout=8)
+    return res.returncode == 0 and bool(res.stdout.strip())
+
+
+def ping_ok(target: str) -> bool:
+    if not target:
+        return True
+    res = run(["ping", "-c", "1", "-W", "2", target], timeout=6)
+    return res.returncode == 0
+
+
+def reconnect_wifi(cfg) -> None:
+    ssid = str(cfg.get("wifi_ssid", "")).strip()
+    password = str(cfg.get("wifi_pass", "")).strip()
+    log("tentando recuperar conectividade de rede")
+    restart_service("NetworkManager")
+    time.sleep(8)
+
+    if ssid and password and Path("/usr/local/bin/repeater-wifi-connect").exists():
+        res = run(["/usr/local/bin/repeater-wifi-connect", ssid, password], timeout=45)
+        if res.returncode == 0:
+            log(f"wifi salvo reaplicado: {ssid}")
+        else:
+            log(f"falha ao reaplicar wifi salvo {ssid}: {(res.stderr or res.stdout).strip()}")
+
+    if Path("/etc/systemd/system/repeater-wifi-fallback.service").exists():
+        restart_service("repeater-wifi-fallback.service")
+
+
+def remember_failure(reasons):
+    now = int(time.time())
+    state = load_json(STATE_FILE, {"first_failure": now, "count": 0, "last_reasons": []})
+    if now - int(state.get("first_failure", now)) > FAIL_WINDOW_SEC:
+        state = {"first_failure": now, "count": 0, "last_reasons": []}
+    state["count"] = int(state.get("count", 0)) + 1
+    state["last_failure"] = now
+    state["last_reasons"] = reasons
+    save_json(STATE_FILE, state)
+    return state
+
+
+def clear_failures():
+    if STATE_FILE.exists():
+        STATE_FILE.unlink()
+
+
+def main():
+    cfg = load_config()
+    reasons = []
+
+    status_ok = file_fresh(STATUS_FILE, STATUS_STALE_SEC)
+    if not status_ok:
+        reasons.append("status_monitor_parado")
+        restart_service("status.service")
+        time.sleep(2)
+        status_ok = file_fresh(STATUS_FILE, STATUS_STALE_SEC)
+
+    svx_ok = service_active("svxlink")
+    if not svx_ok:
+        reasons.append("svxlink_inativo")
+        restart_service("svxlink")
+        time.sleep(5)
+        svx_ok = service_active("svxlink")
+
+    addrs = ip_addrs()
+    wired_ok = interface_has_ip("eth0")
+    wifi_ok = interface_has_ip("wlan0")
+    route_ok = has_default_route()
+    server_ip = str(cfg.get("server_ip", "")).strip()
+    server_ok = True
+
+    if addrs and route_ok and server_ip:
+        server_ok = ping_ok(server_ip)
+        if not server_ok:
+            reasons.append("servidor_inacessivel")
+
+    if not addrs or (not wired_ok and not wifi_ok):
+        reasons.append("sem_ip")
+        reconnect_wifi(cfg)
+        time.sleep(12)
+        addrs = ip_addrs()
+        wired_ok = interface_has_ip("eth0")
+        wifi_ok = interface_has_ip("wlan0")
+
+    recovered = file_fresh(STATUS_FILE, STATUS_STALE_SEC) and service_active("svxlink") and bool(addrs)
+
+    if server_ip and not server_ok and bool(addrs):
+        # Nao contar indisponibilidade isolada do servidor como motivo para reboot.
+        # Ainda assim, uma tentativa leve de reciclar o SvxLink ajuda a religar o link.
+        restart_service("svxlink")
+        time.sleep(4)
+
+    if reasons and not recovered:
+        state = remember_failure(reasons)
+        log(f"falha detectada: {', '.join(reasons)} | tentativa {state['count']}/{REBOOT_AFTER_FAILS}")
+        if int(state.get("count", 0)) >= REBOOT_AFTER_FAILS:
+            log("falha persistente apos varias tentativas; reiniciando Raspberry")
+            run(["systemctl", "reboot"], timeout=15)
+        return
+
+    if reasons:
+        log(f"problema recuperado automaticamente: {', '.join(reasons)}")
+    clear_failures()
+
+
+if __name__ == "__main__":
+    main()
