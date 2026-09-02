@@ -1,0 +1,168 @@
+#!/bin/sh
+set -eu
+
+CONFIG_FILE=/etc/repeater/config.json
+SVX_FILE=/etc/svxlink/svxlink.conf
+UPLOAD_FILE="${1:-}"
+ID_WAV=/var/lib/repeater/id.wav
+
+mkdir -p /etc/repeater /var/lib/repeater
+
+if [ -n "$UPLOAD_FILE" ] && [ -f "$UPLOAD_FILE" ]; then
+  ffmpeg -y -hide_banner -loglevel error -i "$UPLOAD_FILE" -ac 1 -ar 16000 -c:a pcm_s16le "$ID_WAV"
+  chmod 0644 "$ID_WAV"
+fi
+
+python3 - <<'PY'
+import json
+import re
+from pathlib import Path
+
+config_file = Path("/etc/repeater/config.json")
+svx_file = Path("/etc/svxlink/svxlink.conf")
+
+config = json.loads(config_file.read_text() or "{}")
+txt = svx_file.read_text() if svx_file.exists() else ""
+
+def clean(value):
+    return str(value or "").replace("\n", "").replace("\r", "").strip()
+
+def set_value(text, section, key, value):
+    value = clean(value)
+    section_re = re.compile(r"(^\[" + re.escape(section) + r"\]\s*$)(.*?)(?=^\[|\Z)", re.M | re.S)
+    match = section_re.search(text)
+    line = f"{key}={value}"
+    if not match:
+        return text.rstrip() + f"\n\n[{section}]\n{line}\n"
+
+    body = match.group(2)
+    key_re = re.compile(r"^" + re.escape(key) + r"\s*=.*$", re.M)
+    if key_re.search(body):
+        body = key_re.sub(line, body, count=1)
+    else:
+        if body and not body.endswith("\n"):
+            body += "\n"
+        body += line + "\n"
+    return text[:match.start(2)] + body + text[match.end(2):]
+
+callsign = clean(config.get("callsign")).upper()
+if callsign:
+    txt = set_value(txt, "RepeaterLogic", "CALLSIGN", callsign)
+    txt = set_value(txt, "ReflectorLogic", "CALLSIGN", callsign + "-R")
+    txt = set_value(txt, "ModuleEchoLink", "CALLSIGN", callsign + "-L")
+else:
+    txt = set_value(txt, "RepeaterLogic", "CALLSIGN", "CHANGE-ME")
+    txt = set_value(txt, "ReflectorLogic", "CALLSIGN", "CHANGE-ME-R")
+    txt = set_value(txt, "ModuleEchoLink", "CALLSIGN", "CHANGE-ME-L")
+
+id_interval = clean(config.get("id_interval")) or "10"
+hang_time = clean(config.get("hang_time")) or "1500"
+id_mode = clean(config.get("id_mode")) or "cw"
+id_audio = "/var/lib/repeater/id.wav"
+
+txt = set_value(txt, "RepeaterLogic", "ID_INTERVAL", id_interval)
+txt = set_value(txt, "RepeaterLogic", "SHORT_IDENT_INTERVAL", id_interval)
+txt = set_value(txt, "RepeaterLogic", "LONG_IDENT_INTERVAL", id_interval)
+txt = set_value(txt, "RepeaterLogic", "IDENT_ONLY_AFTER_TX", "0")
+txt = set_value(txt, "RepeaterLogic", "RGR_SOUND_DELAY", hang_time)
+txt = set_value(txt, "Rx1", "GPIO_SQL_PIN", "gpio535")
+txt = set_value(txt, "Rx1", "SQL_INVERTED", "0")
+
+if id_mode == "audio":
+    for key in ("SHORT_VOICE_ID_ENABLE", "LONG_VOICE_ID_ENABLE", "SHORT_CW_ID_ENABLE", "LONG_CW_ID_ENABLE"):
+        txt = set_value(txt, "RepeaterLogic", key, "0")
+    txt = set_value(txt, "RepeaterLogic", "SHORT_ANNOUNCE_ENABLE", "1")
+    txt = set_value(txt, "RepeaterLogic", "LONG_ANNOUNCE_ENABLE", "1")
+    txt = set_value(txt, "RepeaterLogic", "SHORT_ANNOUNCE_FILE", id_audio)
+    txt = set_value(txt, "RepeaterLogic", "LONG_ANNOUNCE_FILE", id_audio)
+elif id_mode == "alt":
+    txt = set_value(txt, "RepeaterLogic", "SHORT_VOICE_ID_ENABLE", "0")
+    txt = set_value(txt, "RepeaterLogic", "LONG_VOICE_ID_ENABLE", "0")
+    txt = set_value(txt, "RepeaterLogic", "SHORT_CW_ID_ENABLE", "1")
+    txt = set_value(txt, "RepeaterLogic", "LONG_CW_ID_ENABLE", "1")
+    txt = set_value(txt, "RepeaterLogic", "SHORT_ANNOUNCE_ENABLE", "1")
+    txt = set_value(txt, "RepeaterLogic", "LONG_ANNOUNCE_ENABLE", "1")
+    txt = set_value(txt, "RepeaterLogic", "SHORT_ANNOUNCE_FILE", id_audio)
+    txt = set_value(txt, "RepeaterLogic", "LONG_ANNOUNCE_FILE", id_audio)
+else:
+    txt = set_value(txt, "RepeaterLogic", "SHORT_VOICE_ID_ENABLE", "0")
+    txt = set_value(txt, "RepeaterLogic", "LONG_VOICE_ID_ENABLE", "0")
+    txt = set_value(txt, "RepeaterLogic", "SHORT_CW_ID_ENABLE", "1")
+    txt = set_value(txt, "RepeaterLogic", "LONG_CW_ID_ENABLE", "1")
+    txt = set_value(txt, "RepeaterLogic", "SHORT_ANNOUNCE_ENABLE", "0")
+    txt = set_value(txt, "RepeaterLogic", "LONG_ANNOUNCE_ENABLE", "0")
+
+server_ip = clean(config.get("server_ip")) if callsign else ""
+server_port = clean(config.get("server_port")) or "5300"
+server_pass = clean(config.get("server_pass")) if callsign and server_ip else ""
+reflector_ready = bool(callsign and server_ip and server_pass)
+
+if reflector_ready:
+    txt = set_value(txt, "GLOBAL", "LOGICS", "RepeaterLogic,ReflectorLogic")
+    txt = set_value(txt, "GLOBAL", "LINKS", "ReflectorLink")
+    txt = set_value(txt, "ReflectorLogic", "HOST", server_ip)
+    txt = set_value(txt, "ReflectorLogic", "HOSTS", server_ip)
+else:
+    txt = set_value(txt, "GLOBAL", "LOGICS", "RepeaterLogic")
+    txt = set_value(txt, "GLOBAL", "LINKS", "")
+    txt = set_value(txt, "ReflectorLogic", "HOST", "127.0.0.1")
+    txt = set_value(txt, "ReflectorLogic", "HOSTS", "127.0.0.1")
+txt = set_value(txt, "ReflectorLogic", "PORT", server_port)
+txt = set_value(txt, "ReflectorLogic", "HOST_PORT", server_port)
+txt = set_value(txt, "ReflectorLogic", "AUTH_KEY", server_pass)
+txt = set_value(txt, "ReflectorLogic", "DEFAULT_TG", "999")
+txt = set_value(txt, "ReflectorLogic", "MONITOR_TGS", "999")
+txt = set_value(txt, "ReflectorLogic", "TG_SELECT_TIMEOUT", "3600")
+txt = set_value(txt, "ReflectorLogic", "TG_SELECT_INHIBIT_TIMEOUT", "0")
+txt = set_value(txt, "ReflectorLogic", "UDP_HEARTBEAT_INTERVAL", "5")
+
+backup = svx_file.with_name(svx_file.name + ".bak-apply")
+if svx_file.exists():
+    backup.write_text(svx_file.read_text())
+svx_file.write_text(txt)
+PY
+
+
+python3 - <<'PY'
+import json
+import subprocess
+from pathlib import Path
+
+config_file = Path("/etc/repeater/config.json")
+try:
+    config = json.loads(config_file.read_text(encoding="utf-8") or "{}")
+except Exception:
+    config = {}
+
+def as_int(name, default):
+    try:
+        return max(0, min(100, int(str(config.get(name, default)).strip())))
+    except Exception:
+        return default
+
+mic = as_int("mic_gain", 50)
+spk = as_int("spk_vol", 50)
+mic_val = round((mic * 28) / 100)
+spk_val = round((spk * 30) / 100)
+
+selected = None
+for card in range(0, 8):
+    try:
+        out = subprocess.run(["amixer", "-c", str(card), "scontrols"], check=True, text=True, capture_output=True).stdout
+    except Exception:
+        continue
+    if "'Mic'" in out and "'Speaker'" in out:
+        selected = card
+        break
+
+if selected is not None:
+    subprocess.run(["amixer", "-c", str(selected), "set", "Mic", "capture", str(mic_val), "cap"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(["amixer", "-c", str(selected), "set", "Speaker", str(spk_val), "unmute"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(["amixer", "-c", str(selected), "set", "Auto Gain Control", "off"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    Path("/tmp/repeater_audio_apply.log").write_text(f"card={selected} mic={mic}({mic_val}) spk={spk}({spk_val})\n", encoding="utf-8")
+else:
+    Path("/tmp/repeater_audio_apply.log").write_text("placa USB com Mic/Speaker nao encontrada\n", encoding="utf-8")
+PY
+
+/usr/local/bin/repeater-gpio-setup 2>/dev/null || true
+systemctl restart svxlink

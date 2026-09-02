@@ -1,5 +1,5 @@
 {
-  "latest": "4.7",
+  "latest": "4.8",
   "releases": {
     "4.6": {
       "title": "Acesso tecnico de emergencia",
@@ -96,6 +96,12 @@
       "description": "Adiciona opcao para anunciar a hora cheia quando a repetidora esta em repouso. Tambem instala a tela e os comandos de atualizacao remota.",
       "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v2.6.tar.gz",
       "sha256": "c9a95dd1751926fc9fad22539b985893a6e287318f1730782124bc7a947bae14"
+    },
+    "4.8": {
+      "title": "Autocura inteligente de audio e radio",
+      "description": "Corrige a estabilidade do repetidor: queda temporaria do servidor nao reinicia mais o SvxLink. A autocura passa a verificar painel, rede, SvxLink e placa de audio USB; tenta recuperar somente o componente local com falha e reinicia o Raspberry apenas se a falha local persistir por varios ciclos.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v4.8.tar.gz",
+      "sha256": "3285d3e6b7c91966d039caafacc938822aabad4de9d0a967c21261c4c11bd51c"
     },
     "4.7": {
       "title": "Autocura de rede e servicos",

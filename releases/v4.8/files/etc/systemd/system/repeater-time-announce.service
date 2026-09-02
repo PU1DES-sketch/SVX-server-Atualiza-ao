@@ -1,0 +1,6 @@
+[Unit]
+Description=Prepare hourly time announcement for repeater
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/repeater_time_announce.py

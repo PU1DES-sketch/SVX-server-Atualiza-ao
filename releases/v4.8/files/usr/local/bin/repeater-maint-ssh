@@ -1,0 +1,116 @@
+#!/bin/sh
+set -eu
+
+USER_NAME="protoadmin"
+PASS_FILE="/etc/repeater/maintenance_ssh_password"
+UNTIL_FILE="/var/lib/repeater/maintenance_ssh_until"
+CONF_FILE="/etc/ssh/sshd_config.d/95-protoradio-maint.conf"
+
+ensure_dirs() {
+  mkdir -p /etc/repeater
+  mkdir -p /var/lib/repeater
+  mkdir -p /etc/ssh/sshd_config.d
+}
+
+ensure_user() {
+  if ! id "$USER_NAME" >/dev/null 2>&1; then
+    useradd -m -s /bin/bash -G sudo "$USER_NAME"
+  fi
+}
+
+write_conf() {
+  cat >"$CONF_FILE" <<'EOF'
+PasswordAuthentication yes
+PermitRootLogin no
+AllowUsers protoadmin
+EOF
+}
+
+ensure_password() {
+  if [ ! -s "$PASS_FILE" ]; then
+    tr -dc 'A-Za-z0-9#@!%+=' </dev/urandom | head -c 24 >"$PASS_FILE"
+    printf '\n' >>"$PASS_FILE"
+    chmod 600 "$PASS_FILE"
+  fi
+  pass="$(tr -d '\r\n' <"$PASS_FILE")"
+  printf '%s:%s\n' "$USER_NAME" "$pass" | chpasswd
+}
+
+enable_ssh() {
+  minutes="${1:-120}"
+  now="$(date +%s)"
+  until_epoch=$((now + minutes * 60))
+  ensure_dirs
+  ensure_user
+  write_conf
+  ensure_password
+  passwd -u "$USER_NAME" >/dev/null 2>&1 || true
+  usermod -s /bin/bash "$USER_NAME" >/dev/null 2>&1 || true
+  systemctl unmask ssh >/dev/null 2>&1 || true
+  systemctl unmask ssh.socket >/dev/null 2>&1 || true
+  systemctl enable ssh >/dev/null 2>&1 || true
+  systemctl restart ssh >/dev/null 2>&1 || systemctl start ssh >/dev/null 2>&1 || true
+  printf '%s\n' "$until_epoch" >"$UNTIL_FILE"
+  systemd-run --unit repeater-maint-ssh-disable --on-active="${minutes}m" /usr/local/bin/repeater-maint-ssh disable >/dev/null 2>&1 || true
+}
+
+disable_ssh() {
+  systemctl stop ssh >/dev/null 2>&1 || true
+  systemctl disable ssh >/dev/null 2>&1 || true
+  systemctl mask ssh >/dev/null 2>&1 || true
+  systemctl mask ssh.socket >/dev/null 2>&1 || true
+  passwd -l "$USER_NAME" >/dev/null 2>&1 || true
+  usermod -s /usr/sbin/nologin "$USER_NAME" >/dev/null 2>&1 || true
+  rm -f "$UNTIL_FILE"
+}
+
+rotate_password() {
+  rm -f "$PASS_FILE"
+  ensure_password
+}
+
+status_json() {
+  ensure_dirs
+  ensure_user
+  write_conf
+  ensure_password
+  pass="$(tr -d '\r\n' <"$PASS_FILE")"
+  active="0"
+  if systemctl is-active ssh >/dev/null 2>&1; then
+    active="1"
+  fi
+  expires=""
+  expires_epoch=""
+  if [ -f "$UNTIL_FILE" ]; then
+    expires_epoch="$(tr -d '\r\n' <"$UNTIL_FILE" || true)"
+    if [ -n "$expires_epoch" ]; then
+      expires="$(date -d "@$expires_epoch" '+%d/%m/%Y %H:%M:%S' 2>/dev/null || true)"
+    fi
+  fi
+  cat <<EOF
+{"ok":true,"active":$active,"user":"$USER_NAME","password":"$pass","expires":"$expires","expires_epoch":"$expires_epoch"}
+EOF
+}
+
+cmd="${1:-status}"
+case "$cmd" in
+  enable)
+    enable_ssh "${2:-120}"
+    status_json
+    ;;
+  disable)
+    disable_ssh
+    status_json
+    ;;
+  rotate)
+    rotate_password
+    status_json
+    ;;
+  status)
+    status_json
+    ;;
+  *)
+    echo "Uso: $0 {status|enable [minutos]|disable|rotate}" >&2
+    exit 1
+    ;;
+esac

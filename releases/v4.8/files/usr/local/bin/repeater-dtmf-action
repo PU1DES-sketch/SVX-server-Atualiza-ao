@@ -1,0 +1,172 @@
+#!/usr/bin/env python3
+import json
+import re
+import subprocess
+import sys
+from datetime import datetime
+from pathlib import Path
+
+CONFIG = Path("/etc/repeater/config.json")
+SVXCONF = Path("/etc/svxlink/svxlink.conf")
+PTT = Path("/sys/class/gpio/gpio534/value")
+LOG = Path("/var/log/repeater-dtmf.log")
+
+
+def log(message):
+    LOG.parent.mkdir(parents=True, exist_ok=True)
+    with LOG.open("a", encoding="utf-8") as fh:
+        fh.write(f"{datetime.now():%F %T} {message}\n")
+
+
+def read_config():
+    if CONFIG.exists():
+        try:
+            return json.loads(CONFIG.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    return {}
+
+
+def save_config(cfg):
+    CONFIG.parent.mkdir(parents=True, exist_ok=True)
+    CONFIG.write_text(json.dumps(cfg, indent=4, ensure_ascii=False), encoding="utf-8")
+
+
+def normalize(value):
+    return re.sub(r"[^0-9ABCD*]", "", str(value or "").upper())
+
+
+def section_set(text, section, key, value):
+    lines = text.splitlines()
+    out = []
+    current = None
+    changed = False
+    inserted = False
+    for line in lines:
+        if line.startswith("[") and line.endswith("]"):
+            if current == section and not changed:
+                out.append(f"{key}={value}")
+                changed = True
+            current = line[1:-1]
+        if current == section and line.startswith(key + "="):
+            out.append(f"{key}={value}")
+            changed = True
+            inserted = True
+        else:
+            out.append(line)
+    if current == section and not changed:
+        out.append(f"{key}={value}")
+        inserted = True
+    if not inserted and f"[{section}]" not in text:
+        out.extend(["", f"[{section}]", f"{key}={value}"])
+    return "\n".join(out).rstrip() + "\n"
+
+
+def global_set(text, key, value):
+    lines = []
+    changed = False
+    for line in text.splitlines():
+        if line.startswith(key + "="):
+            lines.append(f"{key}={value}")
+            changed = True
+        else:
+            lines.append(line)
+    if not changed:
+        lines.append(f"{key}={value}")
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def ptt_off():
+    try:
+        PTT.write_text("0")
+    except Exception:
+        pass
+
+
+def restart_svx():
+    subprocess.run(["systemctl", "restart", "svxlink"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
+def apply_state(cfg):
+    text = SVXCONF.read_text(encoding="utf-8", errors="ignore") if SVXCONF.exists() else ""
+    repeater_enabled = str(cfg.get("repeater_enabled", "1")) == "1"
+    link_enabled = str(cfg.get("link_enabled", "1")) == "1"
+    has_server = bool(str(cfg.get("server_ip", "")).strip())
+
+    if not repeater_enabled:
+        text = section_set(text, "RepeaterLogic", "OPEN_ON_SQL", "0")
+        text = global_set(text, "LOGICS", "RepeaterLogic")
+        text = global_set(text, "LINKS", "")
+        text = section_set(text, "ReflectorLink", "DEFAULT_ACTIVE", "0")
+        ptt_off()
+    else:
+        text = section_set(text, "RepeaterLogic", "OPEN_ON_SQL", "100")
+        if link_enabled and has_server:
+            text = global_set(text, "LOGICS", "RepeaterLogic,ReflectorLogic")
+            text = global_set(text, "LINKS", "ReflectorLink")
+            text = section_set(text, "ReflectorLink", "DEFAULT_ACTIVE", "1")
+        else:
+            text = global_set(text, "LOGICS", "RepeaterLogic")
+            text = global_set(text, "LINKS", "")
+            text = section_set(text, "ReflectorLink", "DEFAULT_ACTIVE", "0")
+
+    SVXCONF.write_text(text, encoding="utf-8")
+    restart_svx()
+
+
+def run_command(name, cfg):
+    if name == "link_on":
+        cfg["link_enabled"] = "1"
+        save_config(cfg)
+        apply_state(cfg)
+        return "Link ativado"
+    if name == "link_off":
+        cfg["link_enabled"] = "0"
+        save_config(cfg)
+        apply_state(cfg)
+        return "Link desativado"
+    if name == "repeater_on":
+        cfg["repeater_enabled"] = "1"
+        save_config(cfg)
+        apply_state(cfg)
+        return "Repetidora ativada"
+    if name == "repeater_off":
+        cfg["repeater_enabled"] = "0"
+        save_config(cfg)
+        apply_state(cfg)
+        return "Repetidora desativada"
+    if name == "apply":
+        apply_state(cfg)
+        return "Estado DTMF reaplicado"
+    return "Comando desconhecido"
+
+
+def main():
+    cfg = read_config()
+    if len(sys.argv) > 1 and sys.argv[1] == "apply":
+        msg = run_command("apply", cfg)
+        log(msg)
+        print(msg)
+        return
+
+    if str(cfg.get("dtmf_enabled", "1")) != "1":
+        return
+
+    raw = normalize(sys.argv[1] if len(sys.argv) > 1 else "")
+    password = normalize(cfg.get("dtmf_password", "1234"))
+    mapping = {
+        password + normalize(cfg.get("dtmf_link_on", "1")): "link_on",
+        password + normalize(cfg.get("dtmf_link_off", "2")): "link_off",
+        password + normalize(cfg.get("dtmf_repeater_on", "3")): "repeater_on",
+        password + normalize(cfg.get("dtmf_repeater_off", "4")): "repeater_off",
+    }
+    action = mapping.get(raw)
+    if not action:
+        return
+    msg = run_command(action, cfg)
+    log(f"{raw}: {msg}")
+    print(msg)
+
+
+if __name__ == "__main__":
+    main()
