@@ -1,6 +1,12 @@
 {
-  "latest": "5.0",
+  "latest": "5.1",
   "releases": {
+    "5.1": {
+      "title": "Bip de cortesia continuo e mais audivel",
+      "description": "Corrige o rabicho: o PTT permanece acionado pelo tempo configurado, o bip de cortesia toca antes do fechamento e so depois a transmissao encerra. O nivel do bip foi aumentado moderadamente. Antes de aplicar, a atualizacao salva backup do SvxLink, da rotina do bip e da configuracao atual; nao altera IP, Wi-Fi, servidor ou audio de identificacao.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v5.1.tar.gz",
+      "sha256": "f5c314177da766b2af40ffe072738a559d5b29b61768b8f930b1f4e945b174db"
+    },
     "5.0": {
       "title": "Autocura local sem dependencia de Internet",
       "description": "O repetidor passa a cuidar somente do que e local: monitor do painel parado, SvxLink inativo e placa USB de audio ausente. Queda de servidor, Internet, Wi-Fi ou cabo de rede nunca reinicia o radio. Quando a placa USB some, tenta recuperar somente o audio e o SvxLink, sem reiniciar a rede ou o Raspberry.",
