@@ -1,6 +1,12 @@
 {
-  "latest": "4.9",
+  "latest": "5.0",
   "releases": {
+    "5.0": {
+      "title": "Autocura local sem dependencia de Internet",
+      "description": "O repetidor passa a cuidar somente do que e local: monitor do painel parado, SvxLink inativo e placa USB de audio ausente. Queda de servidor, Internet, Wi-Fi ou cabo de rede nunca reinicia o radio. Quando a placa USB some, tenta recuperar somente o audio e o SvxLink, sem reiniciar a rede ou o Raspberry.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v5.0.tar.gz",
+      "sha256": "b9c43bab743515cd9fc88eabe2be691870f2230a7c64d0123f93a929b19a9a80"
+    },
     "4.9": {
       "title": "Correcao segura da autocura",
       "description": "Corrige a causa dos reinicios indevidos: falha temporaria de ping do servidor nao reinicia mais o SvxLink, a rede ou o Raspberry. A atualizacao altera somente a rotina de autocura, cria um backup dela e preserva IP, Wi-Fi, audio, painel e configuracoes atuais.",
