@@ -1,6 +1,12 @@
 {
-  "latest": "4.8",
+  "latest": "4.9",
   "releases": {
+    "4.9": {
+      "title": "Correcao segura da autocura",
+      "description": "Corrige a causa dos reinicios indevidos: falha temporaria de ping do servidor nao reinicia mais o SvxLink, a rede ou o Raspberry. A atualizacao altera somente a rotina de autocura, cria um backup dela e preserva IP, Wi-Fi, audio, painel e configuracoes atuais.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v4.9.tar.gz",
+      "sha256": "421fb736040c761799aa3e60dc696efb089d212b091ded8856e577d6853a6cfa"
+    },
     "4.6": {
       "title": "Acesso tecnico de emergencia",
       "description": "Adiciona um acesso tecnico forte e unico por repetidora, desligado por padrao. Pelo painel protegido, o administrador pode liberar o SSH por tempo limitado, gerar nova senha tecnica e desligar o acesso novamente quando terminar a manutencao.",
