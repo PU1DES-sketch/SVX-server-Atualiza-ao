@@ -1,6 +1,12 @@
 {
-  "latest": "5.1",
+  "latest": "5.2",
   "releases": {
+    "5.2": {
+      "title": "Correcao do instalador de atualizacoes",
+      "description": "Corrige o pacote de atualizacao para que a instalacao remota encontre corretamente o instalador. Mantem o ajuste do bip de cortesia continuo, o ganho mais audivel e a autocura apenas local. Cria backup antes de alterar o SvxLink; nao altera IP, Wi-Fi, servidor ou configuracoes de audio.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v5.2.tar.gz",
+      "sha256": "8d17945ccbcdcd65a2599277dd873a8d05e3c6b30bed72b84b1dfecda4e6234b"
+    },
     "5.1": {
       "title": "Bip de cortesia continuo e mais audivel",
       "description": "Corrige o rabicho: o PTT permanece acionado pelo tempo configurado, o bip de cortesia toca antes do fechamento e so depois a transmissao encerra. O nivel do bip foi aumentado moderadamente. Antes de aplicar, a atualizacao salva backup do SvxLink, da rotina do bip e da configuracao atual; nao altera IP, Wi-Fi, servidor ou audio de identificacao.",
