@@ -1,6 +1,12 @@
 {
-  "latest": "5.2",
+  "latest": "5.3",
   "releases": {
+    "5.3": {
+      "title": "Correcao do chiado antes do bip",
+      "description": "Corrige o aplicador de configuracoes para que o rabicho use somente SQL_HANGTIME. Remove a pausa RGR_SOUND_DELAY que deixava o transmissor aberto sem audio antes do bip. Mantem o bip no fim da transmissao, cria backup automatico e reinicia somente o SvxLink; nao altera IP, Wi-Fi, servidor ou audio de identificacao.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v5.3.tar.gz",
+      "sha256": "17cda59e129e2e9f1b2d0b3e627cde2419e5de8667b19172bacc1ef8fb8556a9"
+    },
     "5.2": {
       "title": "Correcao do instalador de atualizacoes",
       "description": "Corrige o pacote de atualizacao para que a instalacao remota encontre corretamente o instalador. Mantem o ajuste do bip de cortesia continuo, o ganho mais audivel e a autocura apenas local. Cria backup antes de alterar o SvxLink; nao altera IP, Wi-Fi, servidor ou configuracoes de audio.",
