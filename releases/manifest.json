@@ -1,6 +1,12 @@
 {
-  "latest": "5.4",
+  "latest": "5.5",
   "releases": {
+    "5.5": {
+      "title": "Rabicho silencioso compativel",
+      "description": "Completa a correcao do chiado em instalacoes antigas: fecha o audio de entrada ao soltar o PTT, mantem a transmissao com silencio digital pelo tempo configurado e toca o bip sem rearmar o PTT. Adiciona a configuracao persistente que faltava em imagens antigas. Cria backup e reinicia somente o SvxLink.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v5.5.tar.gz",
+      "sha256": "0fd279af1f2146740d95828d4d6e49025d5e09472bb70023d2acd202360e27bf"
+    },
     "5.4": {
       "title": "Rabicho silencioso antes do bip",
       "description": "Remove o chiado apos soltar o PTT: o audio do receptor fecha imediatamente e o Raspberry mantem a transmissao com silencio digital pelo tempo configurado, seguido do bip de cortesia. O PTT nao precisa rearmar. Cria backup e reinicia somente o SvxLink; nao altera IP, Wi-Fi, servidor ou audio de identificacao.",
