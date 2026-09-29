@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ProtoRadio MultiLink</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: #d7e1eb; color: #172033; font: 14px "Segoe UI", Arial, sans-serif; }
+    aside { position: fixed; inset: 0 auto 0 0; width: 208px; background: #101820; color: #d9e4ef; padding: 22px 0; }
+    .brand { padding: 0 22px 22px; color: #38a5ee; font-size: 18px; font-weight: 700; letter-spacing: 1px; border-bottom: 1px solid #263442; }
+    .menu { padding: 15px 0; color: #9eabba; font-size: 12px; }
+    .menu div { padding: 12px 22px; }
+    .menu .active { background: #228ed3; color: #fff; font-weight: 700; }
+    main { margin-left: 208px; padding: 24px; max-width: 1440px; }
+    h1 { margin: 0 0 6px; font-size: 22px; }
+    .sub { color: #5b6876; margin-bottom: 22px; }
+    .tabs { display: flex; gap: 2px; border-bottom: 1px solid #b4c3d2; }
+    .tab { border: 0; padding: 12px 18px; background: #e8eef4; color: #485869; font-weight: 700; cursor: pointer; }
+    .tab.active { background: #fff; color: #1677b6; border-top: 3px solid #2999df; padding-top: 9px; }
+    .panel { display: none; background: #fff; padding: 22px; border: 1px solid #c5d2df; border-top: 0; }
+    .panel.active { display: block; }
+    .head { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8ee; padding-bottom: 16px; margin-bottom: 18px; }
+    h2 { margin: 0; font-size: 18px; }
+    .status { color: #687786; font-size: 12px; }
+    .status b { color: #d16b12; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(180px, 1fr)); gap: 14px 18px; }
+    label { display: grid; gap: 6px; color: #435265; font-size: 12px; font-weight: 700; }
+    input, select { height: 36px; border: 1px solid #b9c7d5; border-radius: 4px; padding: 7px 9px; font: inherit; color: #182535; }
+    .section { grid-column: 1 / -1; color: #1686cc; font-size: 13px; font-weight: 700; padding-top: 8px; border-top: 1px solid #e3ebf2; }
+    .route { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, max-content); gap: 12px 22px; align-items: center; padding: 14px; background: #f4f8fb; border-left: 3px solid #2999df; }
+    .route label { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+    .route input { height: auto; }
+    .note { margin-top: 18px; padding: 12px 14px; border-left: 3px solid #d69a31; background: #fff7e3; color: #735a29; }
+    @media (max-width: 800px) { aside { position: static; width: auto; } main { margin: 0; padding: 14px; } .grid { grid-template-columns: 1fr; } .route { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <aside>
+    <div class="brand">PROTORADIO</div>
+    <div class="menu"><div>DASHBOARD</div><div class="active">LINKS RF</div><div>CONFIGURACOES</div><div>ATUALIZAR PAINEL</div></div>
+  </aside>
+  <main>
+    <h1>Configuracoes de Radio e Links</h1>
+    <div class="sub">Previa da linha MultiLink. Cada aba controla uma interface RF independente.</div>
+    <div class="tabs">
+      <button class="tab active" data-panel="master">REPETIDORA MASTER</button>
+      <button class="tab" data-panel="link1">LINK 1</button>
+      <button class="tab" data-panel="link2">LINK 2</button>
+      <button class="tab" data-panel="link3">LINK 3</button>
+    </div>
+    <section id="master" class="panel active">
+      <div class="head"><h2>Repetidora Master</h2><span class="status">Interface principal <b>ATIVA</b></span></div>
+      <div class="grid">
+        <div class="section">Identificacao compartilhada</div>
+        <label>Indicativo<input value="PP1XXX"></label><label>Intervalo de identificacao (min)<input value="10"></label><label>TOT Master (seg)<input value="100"></label>
+        <div class="section">Audio principal</div>
+        <label>Placa USB<input value="USB Audio #1"></label><label>Ganho de microfone<input value="50"></label><label>Volume de transmissao<input value="50"></label>
+      </div>
+    </section>
+    <section id="link1" class="panel">
+      <div class="head"><h2>Link 1</h2><span class="status">Aguardando placa USB e radio <b>INATIVO</b></span></div>
+      <div class="grid">
+        <div class="section">Interface RF</div>
+        <label>Ativar Link<select><option>Nao</option><option>Sim</option></select></label><label>Nome do link<input value="Link 1 VHF"></label><label>Frequencia / descricao<input placeholder="Ex.: 146.000 MHz"></label>
+        <label>Placa de audio USB<select><option>Selecionar quando conectada</option></select></label><label>GPIO COS<input placeholder="GPIO do COS"></label><label>GPIO PTT<input placeholder="GPIO do PTT"></label>
+        <div class="section">Audio e operacao</div>
+        <label>Ganho de entrada<input value="50"></label><label>Volume de saida<input value="50"></label><label>TOT do link (seg)<input value="100"></label>
+        <div class="route"><strong>Rotas permitidas</strong><label><input type="checkbox" checked> Master para Link 1</label><label><input type="checkbox" checked> Link 1 para Master</label><label><input type="checkbox"> Repassar ID</label><label><input type="checkbox"> Repassar hora certa</label></div>
+      </div>
+      <div class="note">O Link 1 nao transmite de volta para a propria origem. A protecao contra loop sera obrigatoria.</div>
+    </section>
+    <section id="link2" class="panel"><div class="head"><h2>Link 2</h2><span class="status">Aguardando configuracao <b>INATIVO</b></span></div><div class="note">Usa a mesma estrutura do Link 1, com placa USB, COS, PTT e ganhos proprios.</div></section>
+    <section id="link3" class="panel"><div class="head"><h2>Link 3</h2><span class="status">Aguardando configuracao <b>INATIVO</b></span></div><div class="note">Usa a mesma estrutura do Link 1, com placa USB, COS, PTT e ganhos proprios.</div></section>
+  </main>
+  <script>
+    document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab,.panel').forEach(item => item.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.panel).classList.add('active');
+    }));
+  </script>
+</body>
+</html>
