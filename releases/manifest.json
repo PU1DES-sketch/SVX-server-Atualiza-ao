@@ -1,6 +1,12 @@
 {
-  "latest": "5.5",
+  "latest": "5.6",
   "releases": {
+    "5.6": {
+      "title": "Compatibilidade com imagens 4.5",
+      "description": "Permite atualizar bases antigas 4.5 para o rabicho silencioso: converte o aplicador antigo, fecha o audio de entrada ao soltar PTT e mantem a transmissao com silencio digital antes do bip. Cria backup e reinicia somente o SvxLink; nao altera IP, Wi-Fi ou refletor.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v5.6.tar.gz",
+      "sha256": "27fd03f081a83044eed442bcea154f14474c029a52ddce518522087ef5a0cbc8"
+    },
     "5.5": {
       "title": "Rabicho silencioso compativel",
       "description": "Completa a correcao do chiado em instalacoes antigas: fecha o audio de entrada ao soltar o PTT, mantem a transmissao com silencio digital pelo tempo configurado e toca o bip sem rearmar o PTT. Adiciona a configuracao persistente que faltava em imagens antigas. Cria backup e reinicia somente o SvxLink.",
