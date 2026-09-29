@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "links": [
+    {
+      "id": "link1",
+      "enabled": false,
+      "name": "Link 1",
+      "frequency": "",
+      "audio_device": "",
+      "audio_card_id": "",
+      "cos_gpio": "",
+      "ptt_gpio": "",
+      "input_gain": 50,
+      "output_volume": 50,
+      "tot_seconds": 100,
+      "master_to_link": true,
+      "link_to_master": true,
+      "forward_id": false,
+      "forward_time": false
+    },
+    {
+      "id": "link2",
+      "enabled": false,
+      "name": "Link 2",
+      "frequency": "",
+      "audio_device": "",
+      "audio_card_id": "",
+      "cos_gpio": "",
+      "ptt_gpio": "",
+      "input_gain": 50,
+      "output_volume": 50,
+      "tot_seconds": 100,
+      "master_to_link": true,
+      "link_to_master": true,
+      "forward_id": false,
+      "forward_time": false
+    },
+    {
+      "id": "link3",
+      "enabled": false,
+      "name": "Link 3",
+      "frequency": "",
+      "audio_device": "",
+      "audio_card_id": "",
+      "cos_gpio": "",
+      "ptt_gpio": "",
+      "input_gain": 50,
+      "output_volume": 50,
+      "tot_seconds": 100,
+      "master_to_link": true,
+      "link_to_master": true,
+      "forward_id": false,
+      "forward_time": false
+    }
+  ]
+}

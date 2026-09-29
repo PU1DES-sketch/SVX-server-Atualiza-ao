@@ -1,0 +1,109 @@
+#!/usr/bin/env python3
+"""Validate and atomically store the ProtoRadio MultiLink lab configuration.
+
+This deliberately does not start services or alter SvxLink routing. It only
+stores a validated configuration that will be consumed by a later RF stage.
+"""
+
+import json
+import os
+import re
+import sys
+import tempfile
+
+TARGET = "/etc/repeater/links.json"
+LINK_IDS = ("link1", "link2", "link3")
+
+
+def fail(message: str) -> None:
+    print(message, file=sys.stderr)
+    sys.exit(1)
+
+
+def text(value: object, maximum: int, field: str) -> str:
+    if not isinstance(value, str):
+        fail(f"{field} invalido")
+    value = value.strip()
+    if len(value) > maximum or "\n" in value or "\r" in value:
+        fail(f"{field} invalido")
+    return value
+
+
+def integer(value: object, minimum: int, maximum: int, field: str) -> int:
+    if isinstance(value, bool):
+        fail(f"{field} invalido")
+    try:
+        value = int(value)
+    except (TypeError, ValueError):
+        fail(f"{field} invalido")
+    if not minimum <= value <= maximum:
+        fail(f"{field} fora do limite")
+    return value
+
+
+def boolean(value: object, field: str) -> bool:
+    if not isinstance(value, bool):
+        fail(f"{field} invalido")
+    return value
+
+
+def clean_link(item: object, expected_id: str) -> dict:
+    if not isinstance(item, dict) or item.get("id") != expected_id:
+        fail("estrutura de link invalida")
+    gpio_re = re.compile(r"^(|[0-9]{1,2})$")
+    result = {
+        "id": expected_id,
+        "enabled": boolean(item.get("enabled"), "enabled"),
+        "name": text(item.get("name"), 32, "nome"),
+        "frequency": text(item.get("frequency"), 24, "frequencia"),
+        "audio_device": text(item.get("audio_device"), 96, "audio_device"),
+        "audio_card_id": text(item.get("audio_card_id"), 96, "audio_card_id"),
+        "cos_gpio": text(item.get("cos_gpio"), 2, "cos_gpio"),
+        "ptt_gpio": text(item.get("ptt_gpio"), 2, "ptt_gpio"),
+        "input_gain": integer(item.get("input_gain"), 0, 100, "input_gain"),
+        "output_volume": integer(item.get("output_volume"), 0, 100, "output_volume"),
+        "tot_seconds": integer(item.get("tot_seconds"), 10, 600, "tot_seconds"),
+        "master_to_link": boolean(item.get("master_to_link"), "master_to_link"),
+        "link_to_master": boolean(item.get("link_to_master"), "link_to_master"),
+        "forward_id": boolean(item.get("forward_id"), "forward_id"),
+        "forward_time": boolean(item.get("forward_time"), "forward_time"),
+    }
+    if not gpio_re.match(result["cos_gpio"]) or not gpio_re.match(result["ptt_gpio"]):
+        fail("GPIO invalido")
+    if result["cos_gpio"] and result["cos_gpio"] == result["ptt_gpio"]:
+        fail("COS e PTT do mesmo link nao podem usar o mesmo GPIO")
+    return result
+
+
+def main() -> None:
+    if len(sys.argv) != 2:
+        fail("uso: repeater-multilink-save ARQUIVO_JSON")
+    try:
+        with open(sys.argv[1], "r", encoding="utf-8") as handle:
+            data = json.load(handle)
+    except (OSError, json.JSONDecodeError) as error:
+        fail(f"nao foi possivel ler configuracao: {error}")
+    if not isinstance(data, dict) or data.get("schema_version") != 1:
+        fail("versao de configuracao invalida")
+    links = data.get("links")
+    if not isinstance(links, list) or len(links) != len(LINK_IDS):
+        fail("quantidade de links invalida")
+    result = {"schema_version": 1, "links": [clean_link(item, link_id) for item, link_id in zip(links, LINK_IDS)]}
+    os.makedirs(os.path.dirname(TARGET), mode=0o755, exist_ok=True)
+    fd, temporary = tempfile.mkstemp(prefix=".links-", dir=os.path.dirname(TARGET), text=True)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as handle:
+            json.dump(result, handle, indent=2, ensure_ascii=False)
+            handle.write("\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.chmod(temporary, 0o640)
+        os.replace(temporary, TARGET)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+    print("Configuracao MultiLink salva. Nenhuma rota RF foi ativada.")
+
+
+if __name__ == "__main__":
+    main()

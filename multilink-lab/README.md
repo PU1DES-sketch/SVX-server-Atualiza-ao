@@ -25,6 +25,8 @@ indicativo, identificacao e atualizacoes permanecem centralizados no Master.
 
 ## Base de configuracao
 
-O arquivo futuro sera `/etc/repeater/links.json`. O painel mostrado em
-`panel-links-preview.html` e apenas uma previa visual; nao aplica configuracoes
-nem altera o SvxLink.
+O arquivo e `/etc/repeater/links.json`. O painel real esta em `files/` e pode
+ser instalado manualmente na bancada por `sudo ./install-lab.sh`. Ele valida e
+grava as configuracoes, mas nao altera o SvxLink, nao inicia servicos e nao
+aciona PTT/COS. A ativacao RF sera uma etapa posterior, depois de identificar
+as placas USB e testar cada radio isoladamente.
