@@ -1,6 +1,12 @@
 {
-  "latest": "5.8",
+  "latest": "5.9",
   "releases": {
+    "5.9": {
+      "title": "Pacote cumulativo validado para Raspberry Pi",
+      "description": "Reempacota a atualizacao cumulativa com scripts em formato Linux. Mantem painel, hora, DTMF, backup, acesso tecnico, correcao sudo do protoadmin e rabicho silencioso. Preserva as configuracoes existentes.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v5.9.tar.gz",
+      "sha256": "76b4e6e3f9617a4482c79cb1087b5b7d63e9f6f7c49448d2ce1e9b6d9a2e620d"
+    },
     "5.8": {
       "title": "Pacote cumulativo e correcao do acesso tecnico",
       "description": "Atualizacao completa para bases antigas: reinstala painel, hora, DTMF, backup, acesso tecnico e autocura; corrige o usuario protoadmin para receber permissao sudo mesmo quando ele ja existe; aplica tambem o rabicho silencioso. Preserva indicativo, Wi-Fi, servidor e configuracoes do cliente.",

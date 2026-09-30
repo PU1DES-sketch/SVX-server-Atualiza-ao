@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+import json
+import re
+import sys
+from pathlib import Path
+
+CONFIG = Path("/etc/repeater/config.json")
+
+
+def clean(value, default):
+    value = (value or "").strip().upper()
+    value = re.sub(r"[^0-9ABCD*]", "", value)
+    return value or default
+
+
+def main():
+    args = sys.argv[1:]
+    if len(args) < 6:
+        raise SystemExit("uso: repeater-dtmf-config-save enabled senha link_on link_off repeater_on repeater_off")
+
+    data = {}
+    if CONFIG.exists():
+        try:
+            data = json.loads(CONFIG.read_text(encoding="utf-8"))
+        except Exception:
+            data = {}
+
+    enabled, password, link_on, link_off, rep_on, rep_off = args[:6]
+    data["dtmf_enabled"] = "1" if str(enabled) == "1" else "0"
+    data["dtmf_password"] = clean(password, "1234")
+    data["dtmf_link_on"] = clean(link_on, "1")
+    data["dtmf_link_off"] = clean(link_off, "2")
+    data["dtmf_repeater_on"] = clean(rep_on, "3")
+    data["dtmf_repeater_off"] = clean(rep_off, "4")
+
+    CONFIG.parent.mkdir(parents=True, exist_ok=True)
+    CONFIG.write_text(json.dumps(data, indent=4, ensure_ascii=False), encoding="utf-8")
+    print("Configuracao DTMF salva.")
+
+
+if __name__ == "__main__":
+    main()

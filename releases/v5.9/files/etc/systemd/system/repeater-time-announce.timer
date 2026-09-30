@@ -1,0 +1,11 @@
+[Unit]
+Description=Run repeater hourly time announcement check
+
+[Timer]
+OnBootSec=2min
+OnCalendar=*-*-* *:*:00
+AccuracySec=10s
+Persistent=true
+
+[Install]
+WantedBy=timers.target

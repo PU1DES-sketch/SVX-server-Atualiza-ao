@@ -1,2 +1,3 @@
 # Release packages run directly on Raspberry Pi OS. Keep scripts portable to /bin/sh.
 releases/v5.8/** text eol=lf
+releases/v5.9/** text eol=lf
