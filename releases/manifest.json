@@ -5,7 +5,7 @@
       "title": "Pacote cumulativo e correcao do acesso tecnico",
       "description": "Atualizacao completa para bases antigas: reinstala painel, hora, DTMF, backup, acesso tecnico e autocura; corrige o usuario protoadmin para receber permissao sudo mesmo quando ele ja existe; aplica tambem o rabicho silencioso. Preserva indicativo, Wi-Fi, servidor e configuracoes do cliente.",
       "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v5.8.tar.gz",
-      "sha256": "2cd94c6a2ebe74d380044bc00242a4954f5acb5f485483ba3f4c810ff5ed7198"
+      "sha256": "7a982a2f191087b854f2e569595b7247181535d081e10102ff7f4e8a0c25ce2e"
     },
     "5.7": {
       "title": "Atualizacao completa para base 4.5",
