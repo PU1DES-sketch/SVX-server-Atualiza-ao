@@ -1,3 +1,18 @@
-# Release packages run directly on Raspberry Pi OS. Keep scripts portable to /bin/sh.
-releases/v5.8/** text eol=lf
-releases/v5.9/** text eol=lf
+# Release packages run directly on Raspberry Pi OS. Keep executable and web
+# sources portable to Linux without treating voice assets as text.
+releases/v5.8/** -text
+releases/v5.9/** -text
+releases/v5.8/**/*.sh text eol=lf
+releases/v5.9/**/*.sh text eol=lf
+releases/v5.8/**/*.py text eol=lf
+releases/v5.9/**/*.py text eol=lf
+releases/v5.8/**/*.php text eol=lf
+releases/v5.9/**/*.php text eol=lf
+releases/v5.8/**/*.tcl text eol=lf
+releases/v5.9/**/*.tcl text eol=lf
+releases/v5.8/**/*.service text eol=lf
+releases/v5.9/**/*.service text eol=lf
+releases/v5.8/**/*.timer text eol=lf
+releases/v5.9/**/*.timer text eol=lf
+releases/v5.8/files/usr/local/bin/* text eol=lf
+releases/v5.9/files/usr/local/bin/* text eol=lf
