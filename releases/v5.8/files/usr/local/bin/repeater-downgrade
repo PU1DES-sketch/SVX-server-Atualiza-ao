@@ -1,0 +1,46 @@
+#!/bin/sh
+set -eu
+
+ID="${1:-}"
+case "$ID" in
+  update-[0-9.]*-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]) ;;
+  *) echo "Backup invalido."; exit 2 ;;
+esac
+
+SRC="/var/backups/repeater/$ID"
+if [ ! -d "$SRC" ]; then
+  echo "Backup nao encontrado: $SRC"
+  exit 1
+fi
+
+SAFETY="/var/backups/repeater/before-downgrade-$(date +%Y%m%d-%H%M%S)"
+mkdir -p "$SAFETY"
+
+backup_current() {
+  if [ -e "$1" ]; then
+    mkdir -p "$SAFETY$(dirname "$1")"
+    cp -a "$1" "$SAFETY$1"
+  fi
+}
+
+backup_current /etc/repeater
+backup_current /etc/svxlink/svxlink.conf
+backup_current /usr/share/svxlink/events.d/local/RepeaterLogic.tcl
+backup_current /usr/local/bin/repeater-apply-config
+backup_current /usr/local/bin/repeater_time_announce.py
+backup_current /usr/local/bin/repeater_tot.py
+backup_current /usr/local/bin/repeater-dtmf-action
+backup_current /usr/local/bin/repeater-dtmf-config-save
+backup_current /var/www/html/repeater
+backup_current /var/lib/repeater
+
+cp -a "$SRC"/. /
+
+if [ -x /usr/local/bin/repeater-apply-config ]; then
+  /usr/local/bin/repeater-apply-config >/tmp/repeater_downgrade_apply.log 2>&1 || true
+fi
+systemctl daemon-reload >/dev/null 2>&1 || true
+systemctl restart svxlink >/dev/null 2>&1 || true
+
+echo "Downgrade restaurado: $ID"
+echo "Backup de seguranca antes do downgrade: $SAFETY"
