@@ -1,6 +1,12 @@
 {
   "latest": "5.9",
   "releases": {
+    "5.9": {
+      "title": "Sobe o audio depois que a placa USB voltar",
+      "description": "Para o SvxLink, espera a placa de som USB aparecer e so entao inicia de novo. Evita o repetidor ficar sem audio e com o PTT preso quando a placa some no reinicio. Nao altera IP, Wi-Fi nem o bip.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v5.9.tar.gz",
+      "sha256": "5940de7e48f4673f0491e7d9525841090bb7a00a440a8f8f0f95a349f296fd5d"
+    },
     "5.8": {
       "title": "Bip de cortesia audivel",
       "description": "Corrige o bip que abria e fechava a portadora sem som. O tom estava saindo com volume perto de 12 por cento porque a duracao estava no campo da amplitude. O bip Kenwood passa a sair em volume cheio. Cria backup e reinicia somente o SvxLink.",
