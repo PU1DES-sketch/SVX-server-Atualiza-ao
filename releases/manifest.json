@@ -1,6 +1,12 @@
 {
-  "latest": "5.13",
+  "latest": "5.14",
   "releases": {
+    "5.14": {
+      "title": "Reinicia a placa USB e solta um tom",
+      "description": "O volume ja estava aberto. Reinicia a placa de som USB, mantem o alto-falante alto e coloca um tom curto no ar para testar a saida. Nao mexe em Wi-Fi.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v5.14.tar.gz",
+      "sha256": "08cc3ed6e4bd1e4fe180f5c9223a1fe10d643d2f373dd84101d5e914a4bea5b1"
+    },
     "5.13": {
       "title": "Tira o mudo da saida USB",
       "description": "Liga a chave de saida PCM da placa USB e sobe o alto-falante. Nao reinicia o SvxLink e nao mexe em Wi-Fi.",
