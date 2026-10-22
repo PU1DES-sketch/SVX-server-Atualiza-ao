@@ -1,6 +1,12 @@
 {
-  "latest": "5.10",
+  "latest": "5.11",
   "releases": {
+    "5.11": {
+      "title": "Restaura o bip sem travar o PTT",
+      "description": "Remove o limite de 4 segundos que o SvxLink nao aceita e que impedia o bip. Mantem o tom na metade do volume maximo para a placa USB nao segurar a portadora. Espera a placa antes de ligar o SvxLink.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v5.11.tar.gz",
+      "sha256": "08a1187a35b307c7cf1f9130db867b84408938b7bda83c674a693bcf4bfd14bf"
+    },
     "5.10": {
       "title": "Solta o PTT preso no bip",
       "description": "Solta a portadora na hora, baixa o bip para metade do volume maximo e limita o tom a 4 segundos para a placa USB nao segurar o PTT. Espera a placa aparecer antes de ligar o SvxLink de novo.",
