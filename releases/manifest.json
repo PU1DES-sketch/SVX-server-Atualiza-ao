@@ -1,17 +1,11 @@
 {
-  "latest": "5.9",
+  "latest": "5.8",
   "releases": {
-    "5.9": {
-      "title": "Pacote cumulativo validado para Raspberry Pi",
-      "description": "Reempacota a atualizacao cumulativa com scripts em formato Linux. Mantem painel, hora, DTMF, backup, acesso tecnico, correcao sudo do protoadmin e rabicho silencioso. Preserva as configuracoes existentes.",
-      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v5.9.tar.gz",
-      "sha256": "76b4e6e3f9617a4482c79cb1087b5b7d63e9f6f7c49448d2ce1e9b6d9a2e620d"
-    },
     "5.8": {
-      "title": "Pacote cumulativo e correcao do acesso tecnico",
-      "description": "Atualizacao completa para bases antigas: reinstala painel, hora, DTMF, backup, acesso tecnico e autocura; corrige o usuario protoadmin para receber permissao sudo mesmo quando ele ja existe; aplica tambem o rabicho silencioso. Preserva indicativo, Wi-Fi, servidor e configuracoes do cliente.",
+      "title": "Bip de cortesia audivel",
+      "description": "Corrige o bip que abria e fechava a portadora sem som. O tom estava saindo com volume perto de 12 por cento porque a duracao estava no campo da amplitude. O bip Kenwood passa a sair em volume cheio. Cria backup e reinicia somente o SvxLink.",
       "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v5.8.tar.gz",
-      "sha256": "019e39557a88d0a0d236a3a678294abe1d1dc2203e72b9406de483b1230cef47"
+      "sha256": "83ff2a60a1718def9258eeb86b3d27609f88082fc18e7f00a98c9b655dc71bad"
     },
     "5.7": {
       "title": "Atualizacao completa para base 4.5",
