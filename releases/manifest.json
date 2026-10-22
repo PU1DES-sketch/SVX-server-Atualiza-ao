@@ -1,6 +1,12 @@
 {
-  "latest": "5.9",
+  "latest": "5.10",
   "releases": {
+    "5.10": {
+      "title": "Solta o PTT preso no bip",
+      "description": "Solta a portadora na hora, baixa o bip para metade do volume maximo e limita o tom a 4 segundos para a placa USB nao segurar o PTT. Espera a placa aparecer antes de ligar o SvxLink de novo.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v5.10.tar.gz",
+      "sha256": "a0d0008bc7264f823ccd730119f55a1ad24168a27f003896d4c9297a6412b0cd"
+    },
     "5.9": {
       "title": "Sobe o audio depois que a placa USB voltar",
       "description": "Para o SvxLink, espera a placa de som USB aparecer e so entao inicia de novo. Evita o repetidor ficar sem audio e com o PTT preso quando a placa some no reinicio. Nao altera IP, Wi-Fi nem o bip.",
