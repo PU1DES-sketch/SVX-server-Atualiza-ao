@@ -1,6 +1,12 @@
 {
-  "latest": "5.11",
+  "latest": "5.12",
   "releases": {
+    "5.12": {
+      "title": "Reabre o volume da placa USB",
+      "description": "Sobe o alto-falante, o microfone e o PCM da placa USB e tira o mudo. Nao reinicia o SvxLink e nao mexe em Wi-Fi nem no bip.",
+      "package_url": "https://raw.githubusercontent.com/PU1DES-sketch/SVX-server-Atualiza-ao/main/releases/v5.12.tar.gz",
+      "sha256": "eb81817464f9d0ea776d0ee1e48919fe714f25a5cbe2011efbf05c74165bfa2a"
+    },
     "5.11": {
       "title": "Restaura o bip sem travar o PTT",
       "description": "Remove o limite de 4 segundos que o SvxLink nao aceita e que impedia o bip. Mantem o tom na metade do volume maximo para a placa USB nao segurar a portadora. Espera a placa antes de ligar o SvxLink.",
